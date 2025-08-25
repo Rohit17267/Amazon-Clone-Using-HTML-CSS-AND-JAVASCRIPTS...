@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cascading Dropdowns</title>
+</head>
+<body>
+  <h1>Dependent Dropdown Example</h1>
+
+  <!-- First dropdown for states -->
+  <label for="states">Select a State:</label>
+  <select id="states">
+    <option value="">Select a state</option>
+  </select>
+
+  <!-- Second dropdown for cities -->
+  <label for="cities">Select a City:</label>
+  <select id="cities">
+    <option value="">Select a state first</option>
+  </select>
+
+  <script>
+    // Hardcoded data for states and cities
+    const stateCities = {
+      Maharashtra: ["Mumbai", "Pune", "Nagpur"],
+      Karnataka: ["Bengaluru", "Mysuru", "Hubballi"],
+      TamilNadu: ["Chennai", "Coimbatore", "Madurai"],
+      Gujarat: ["Ahmedabad", "Surat", "Vadodara"],
+      Rajasthan: ["Jaipur", "Udaipur", "Jodhpur"],
+    };
+
+    const statesSelect = document.getElementById('states');
+    const citiesSelect = document.getElementById('cities');
+
+    // Populate states dropdown
+    const populateStates = () => {
+      Object.keys(stateCities).forEach(state => {
+        const option = document.createElement('option');
+        option.value = state;
+        option.textContent = state;
+        statesSelect.appendChild(option);
+      });
+    };
+
+    // Populate cities dropdown based on selected state
+    const populateCities = (state) => {
+      // Clear existing city options
+      citiesSelect.innerHTML = '<option value="">Select a city</option>';
+
+      // Get cities for the selected state
+      const cities = stateCities[state] || [];
+      if (cities.length > 0) {
+        cities.forEach(city => {
+          const option = document.createElement('option');
+          option.value = city;
+          option.textContent = city;
+          citiesSelect.appendChild(option);
+        });
+      } else {
+        citiesSelect.innerHTML = '<option value="">No cities available</option>';
+      }
+    };
+
+    // Event listener for state selection change
+    statesSelect.addEventListener('change', () => {
+      const selectedState = statesSelect.value; // Get selected state
+      if (selectedState) {
+        populateCities(selectedState); // Populate cities for the selected state
+      } else {
+        citiesSelect.innerHTML = '<option value="">Select a state first</option>';
+      }
+    });
+
+    // Populate states on page load
+    populateStates();
+  </script>
+</body>
+</html>
